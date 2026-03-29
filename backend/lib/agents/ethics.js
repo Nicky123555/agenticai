@@ -3,7 +3,7 @@
 // Wraps the Ethics Agent logic
 // ============================================================
 
-const { callAgent } = require('../gemini');
+import { callAgent } from '../gemini.js';
 
 /**
  * Checks pending task assignments for workload bias.
@@ -19,4 +19,4 @@ async function checkFairness(assignments, users) {
   );
 }
 
-module.exports = { checkFairness };
+export { checkFairness };

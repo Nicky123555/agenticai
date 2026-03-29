@@ -4,17 +4,16 @@
 // AGENTS TRIGGERED: Recovery Agent
 // ============================================================
 
-const { handleFailure } = require("../../lib/agents/recovery");
-const {
+import { handleFailure } from "../../lib/agents/recovery.js";
+import {
   getTask,
   getUser,
   getProjectUsers,
   updateTask,
   writeAuditLog
-} = require("../../lib/firestore");
+} from "../../lib/firestore.js";
 
-// CHANGED: Use module.exports instead of export default for CommonJS
-module.exports = async function handler(req, res) {
+export default async function handler(req, res) {
   if (req.method !== "POST") {
     return res.status(405).json({ error: "Method not allowed. Use POST." });
   }

@@ -4,11 +4,11 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
 const SIDEBAR_ITEMS = [
-  { href: '/',            icon: '⬡', title: 'Dashboard'   },
-  { href: '/project',     icon: '＋', title: 'New Project' },
-  { href: '/tasks',       icon: '◈', title: 'Tasks'       },
+  { href: '/', icon: '⬡', title: 'Dashboard' },
+  { href: '/project', icon: '＋', title: 'New Project' },
+  { href: '/tasks', icon: '◈', title: 'Tasks' },
   { href: '/leaderboard', icon: '▲', title: 'Leaderboard' },
-  { href: '/logs',        icon: '◉', title: 'Audit Logs'  },
+  { href: '/logs', icon: '◉', title: 'Audit Logs' },
 ];
 
 export function Sidebar() {
@@ -46,7 +46,8 @@ const styles: Record<string, React.CSSProperties> = {
   },
   btn: {
     width: 40, height: 40, borderRadius: 8,
-    border: '1px solid transparent', background: 'transparent',
+    borderWidth: 1, borderStyle: 'solid', borderColor: 'transparent',
+    background: 'transparent',
     color: 'var(--text-muted)', cursor: 'pointer',
     display: 'flex', alignItems: 'center', justifyContent: 'center',
     fontSize: 16, textDecoration: 'none', transition: 'all 0.2s',

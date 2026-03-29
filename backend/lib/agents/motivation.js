@@ -3,7 +3,7 @@
 // Wraps the Motivation Agent logic
 // ============================================================
 
-const { callAgent } = require('../gemini');
+import { callAgent } from '../gemini.js';
 
 /**
  * Calculates XP and badges to award for a completed task.
@@ -21,4 +21,4 @@ async function calculateRewards(userId, userName, task, performance) {
   );
 }
 
-module.exports = { calculateRewards };
+export { calculateRewards };

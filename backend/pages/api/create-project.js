@@ -13,7 +13,8 @@ export default async function handler(req, res) {
   }
 
   try {
-    const { name, description, teamMembers, deadline } = req.body;
+    const projectPayload = req.body.project || req.body;
+    const { name, description, team, deadline } = projectPayload;
 
     if (!name || !description) {
       return res.status(400).json({ error: "Missing required fields: name, description" });
@@ -21,27 +22,21 @@ export default async function handler(req, res) {
 
     console.log(`🚀 NEW_PROJECT_CREATED event triggered for: "${name}"`);
 
+    const teamMembers = Array.isArray(team) ? team : [];
+
     const projectId = await createProject({
       name,
       description,
-      teamMembers: teamMembers || [],
+      teamMembers,
       deadline: deadline || null,
       tasksGenerated: false,
     });
 
-    // --- TESTING HACK: Assign all seeded users to this new project ---
-    const usersSnapshot = await db.collection("users").get();
-    const batch = db.batch();
-    usersSnapshot.forEach(doc => {
-      batch.update(doc.ref, { projectId: projectId });
-    });
-    await batch.commit();
-    console.log(`🔗 Linked all seeded users to new project: ${projectId}`);
-    // -----------------------------------------------------------------
-
+    const teamArray = teamMembers.length > 0 ? teamMembers : ["unassigned"];
+    console.log(`🔗 Project created, will use actual users from seed.js for assignment.`);
     console.log(`💾 Project saved with ID: ${projectId}`);
 
-    const teamSize = teamMembers?.length || 1;
+    const teamSize = teamArray.length;
     const projectDeadline = deadline || "not specified";
     
     const architectResult = await decomposeProject(name, description, teamSize, projectDeadline);

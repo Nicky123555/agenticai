@@ -98,7 +98,6 @@ async function updateTask(taskId, updates) {
 async function getProjectUsers(projectId) {
   const snapshot = await db
     .collection("users")
-    .where("projectId", "==", projectId)
     .get();
 
   return snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));

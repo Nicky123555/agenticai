@@ -4,17 +4,16 @@
 // AGENTS TRIGGERED: Orchestrator Agent, Ethics Agent
 // ============================================================
 
-const { assignTasks } = require("../../lib/agents/orchestrator");
-const { checkFairness } = require("../../lib/agents/ethics");
-const {
+import { assignTasks } from "../../lib/agents/orchestrator.js";
+import { checkFairness } from "../../lib/agents/ethics.js";
+import {
   getUnassignedTasks,
   getProjectUsers,
   updateTask,
   writeAuditLog
-} = require("../../lib/firestore");
+} from "../../lib/firestore.js";
 
-// CHANGED: Use module.exports instead of export default for CommonJS compatibility
-module.exports = async function handler(req, res) {
+export default async function handler(req, res) {
   if (req.method !== "POST") {
     return res.status(405).json({ error: "Method not allowed. Use POST." });
   }
@@ -71,14 +70,31 @@ module.exports = async function handler(req, res) {
     const orchestratorResult = await assignTasks(taskPayload, userPayload);
 
     if (!orchestratorResult.success) {
-      return res.status(500).json({
-        error: "Orchestrator Agent failed",
-        details: orchestratorResult.error
+      // Don't fail completely, just use empty array to trigger fallback
+      console.warn("Orchestrator Agent failed, falling back to manual distribution", orchestratorResult.error);
+    }
+
+    let assignments = orchestratorResult.success && Array.isArray(orchestratorResult.data) ? orchestratorResult.data : [];
+
+    // --- MUST FIX FALLBACK: ALWAYS ASSIGN ALL TASKS ---
+    const unassignedIds = new Set(unassignedTasks.map(t => t.id));
+    assignments.forEach(a => unassignedIds.delete(a.taskId));
+
+    if (unassignedIds.size > 0) {
+      console.log(`⚠️ Orchestrator missed ${unassignedIds.size} tasks. Applying forced fallback assignment.`);
+      let userIndex = 0;
+      unassignedIds.forEach(taskId => {
+        const u = userPayload[userIndex % userPayload.length];
+        assignments.push({
+          taskId,
+          assignedTo: u.id,
+          reason: "Assigned via workload fallback to ensure distribution."
+        });
+        userIndex++;
       });
     }
 
-    const assignments = orchestratorResult.data;
-    console.log(`👥 Orchestrator created ${assignments.length} assignments`);
+    console.log(`👥 Orchestrator/Fallback created ${assignments.length} assignments`);
 
     // ── STEP 3: Call Ethics Agent to check for bias ─────────
     const ethicsUserPayload = users.map(u => ({

@@ -3,7 +3,7 @@
 // Wraps the Recovery Agent logic
 // ============================================================
 
-const { callAgent } = require('../gemini');
+import { callAgent } from '../gemini.js';
 
 /**
  * Determines a recovery action for a failed or overdue task.
@@ -21,4 +21,4 @@ async function handleFailure(reason, task, currentAssignee, availableUsers) {
   );
 }
 
-module.exports = { handleFailure };
+export { handleFailure };

@@ -42,7 +42,7 @@ function mockGeneratedTasks(projectName: string): Task[] {
 export default function CreateProjectPage() {
   const router = useRouter();
   const { showToast } = useToast();
-  const { addTasks, setCurrentProjectId, prependLog, setLoading } = useStore();
+  const { addTasks, setCurrentProjectId, prependLog, setLoading, fetchTasks } = useStore();
 
   const [name,     setName]     = useState('');
   const [desc,     setDesc]     = useState('');
@@ -74,7 +74,9 @@ export default function CreateProjectPage() {
     if (res.success && res.data) {
       tasks = res.data.tasks;
       pid   = res.data.projectId;
-      res.data.logs.forEach((l) => prependLog(l));
+      if (res.data.logs) {
+        res.data.logs.forEach((l) => prependLog(l));
+      }
     } else {
       // Demo fallback
       tasks = mockGeneratedTasks(name);
@@ -105,7 +107,10 @@ export default function CreateProjectPage() {
     setLoading(false);
 
     if (res.success && res.data) {
-      res.data.logs.forEach((l) => prependLog(l));
+      if (res.data.logs) {
+        res.data.logs.forEach((l) => prependLog(l));
+      }
+      await fetchTasks();
     } else {
       const log: AuditLog = {
         id: genId(), agent: 'ORCHESTRATOR', action: 'TASK_ASSIGN',
@@ -113,9 +118,16 @@ export default function CreateProjectPage() {
         reason: 'Assigned all generated tasks based on XP scores, domain expertise, and current workload. Balanced distribution. (Demo mode)',
       };
       prependLog(log);
+      
+      const mockTeam = ['alex', 'priya', 'sam'];
+      const assignedDemoTasks = generatedTasks.map((t, i) => ({
+        ...t,
+        assignee: mockTeam[i % mockTeam.length],
+        status: 'todo' as const
+      }));
+      addTasks(assignedDemoTasks);
     }
 
-    addTasks(generatedTasks);
     setPhase('done');
     showToast('success', '✓ Tasks assigned by Orchestrator Agent');
   }

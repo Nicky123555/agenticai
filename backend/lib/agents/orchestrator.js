@@ -3,7 +3,7 @@
 // Wraps the Orchestrator Agent logic
 // ============================================================
 
-const { callAgent } = require('../gemini');
+import { callAgent } from '../gemini.js';
 
 /**
  * Assigns unassigned tasks to available users based on skills and capacity.
@@ -19,4 +19,4 @@ async function assignTasks(tasks, users) {
   );
 }
 
-module.exports = { assignTasks };
+export { assignTasks };

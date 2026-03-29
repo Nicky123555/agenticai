@@ -1,30 +1,39 @@
-const { evaluateSubmission } = require("../../lib/agents/auditor");
-const { calculateRewards } = require("../../lib/agents/motivation");
-const { getTask, getUser, updateTask, updateUser, writeAuditLog } = require("../../lib/firestore");
+import { evaluateSubmission } from "../../lib/agents/auditor.js";
+import { calculateRewards } from "../../lib/agents/motivation.js";
+import { getTask, getUser, updateTask, updateUser, writeAuditLog } from "../../lib/firestore.js";
 
 const PASS_THRESHOLD = 60;
 
-// CHANGED: Use module.exports for CommonJS compatibility
-module.exports = async function handler(req, res) {
+export default async function handler(req, res) {
   if (req.method !== "POST") {
     return res.status(405).json({ error: "Method not allowed. Use POST." });
   }
 
   try {
-    const { taskId, userId, submissionText, completedAt } = req.body;
+    let { taskId, userId, submissionText, completedAt } = req.body;
 
-    if (!taskId || !userId || !submissionText) {
-      return res.status(400).json({ error: "Missing required fields: taskId, userId, submissionText" });
+    if (!taskId) {
+      return res.status(400).json({ error: "Missing required fields: taskId" });
+    }
+
+    if (!submissionText) {
+      submissionText = "Automated submission for review";
+    }
+
+    const task = await getTask(taskId);
+    if (!task) return res.status(404).json({ error: `Task ${taskId} not found` });
+
+    if (!userId) {
+      userId = task.assignedTo;
+    }
+
+    if (!userId) {
+      return res.status(400).json({ error: "taskId is not assigned to anyone yet." });
     }
 
     console.log(`📤 TASK_SUBMITTED event: task=${taskId}, user=${userId}`);
 
-    const [task, user] = await Promise.all([
-      getTask(taskId),
-      getUser(userId)
-    ]);
-
-    if (!task) return res.status(404).json({ error: `Task ${taskId} not found` });
+    const user = await getUser(userId);
     if (!user) return res.status(404).json({ error: `User ${userId} not found` });
 
     const taskPayload = {

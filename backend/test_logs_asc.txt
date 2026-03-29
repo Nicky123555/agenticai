@@ -1,0 +1,19 @@
+[dotenv@17.3.1] injecting env (5) from .env -- tip: ???? prevent building .env in docker: https://dotenvx.com/prebuild
+LAST 10 LOGS:
+[Architect Agent] Generated 44 tasks for project "E-commerce platform"
+[Architect Agent] Generated 11 tasks for project "e commerce"
+[Architect Agent] Generated 11 tasks for project "e commerce"
+[Recovery Agent] Recovery action "escalate" applied to task "Define Tech Stack & Architecture"
+[Recovery Agent] Recovery action "escalate" applied to task "Define Tech Stack & Architecture"
+[System] ?????? Task "Define Tech Stack & Architecture" flagged for recovery
+[Quality Auditor Agent] Task "Define Tech Stack & Architecture" scored 25/100 (FAIL)
+[Orchestrator Agent] Task "task_013" assigned to user "SaE1z6te3FsyeYsA0Hiw"
+[Orchestrator Agent] Task "task_012" assigned to user "SaE1z6te3FsyeYsA0Hiw"
+[Orchestrator Agent] Task "task_011" assigned to user "SaE1z6te3FsyeYsA0Hiw"
+
+LAST 5 TASKS:
+ID: task_044 | Title: Prepare Detailed README File | Status: unassigned | AssignedTo: null
+ID: task_043 | Title: Code Review and Refactoring for Clean Structure | Status: unassigned | AssignedTo: null
+ID: task_042 | Title: Implement Comprehensive Error Handling | Status: unassigned | AssignedTo: null
+ID: task_041 | Title: Create Admin Order Viewing Section | Status: unassigned | AssignedTo: null
+ID: task_040 | Title: Create Admin Product Management Section (CRUD UI) | Status: unassigned | AssignedTo: null

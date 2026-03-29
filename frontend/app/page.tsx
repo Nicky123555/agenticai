@@ -26,7 +26,7 @@ export default function DashboardPage() {
   const pct = total ? Math.round((done / total) * 100) : 0;
 
   // Projects summary
-  const projects = Array.from(new Set(tasks.map((t: Task) => t.project)));
+  const projects = Array.from(new Set(tasks.map((t: Task) => t.project).filter(Boolean)));
 
   return (
     <div>

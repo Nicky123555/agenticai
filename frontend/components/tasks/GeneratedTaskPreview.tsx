@@ -65,7 +65,7 @@ export function GeneratedTaskPreview({ tasks }: GeneratedTaskPreviewProps) {
                   est. {task.estimate}
                 </span>
               )}
-              {task.deps.length > 0 ? (
+              {task.deps && task.deps.length > 0 ? (
                 <DepChip>deps: {task.deps.join(', ')}</DepChip>
               ) : (
                 <span

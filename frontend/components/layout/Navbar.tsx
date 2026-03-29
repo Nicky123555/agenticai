@@ -5,17 +5,17 @@ import { usePathname } from 'next/navigation';
 import { useStore } from '@/store/useStore';
 
 const NAV_LINKS = [
-  { href: '/',            label: '⬡ Dashboard'  },
-  { href: '/project',     label: '＋ Project'    },
-  { href: '/tasks',       label: '◈ Tasks'       },
+  { href: '/', label: '⬡ Dashboard' },
+  { href: '/project', label: '＋ Project' },
+  { href: '/tasks', label: '◈ Tasks' },
   { href: '/leaderboard', label: '▲ Leaderboard' },
-  { href: '/logs',        label: '◉ Audit Logs'  },
+  { href: '/logs', label: '◉ Audit Logs' },
 ];
 
 export function Navbar() {
   const pathname = usePathname();
-  const agents   = useStore((s) => s.agents);
-  const online   = agents.filter((a) => a.active).length;
+  const agents = useStore((s) => s.agents);
+  const online = agents.filter((a) => a.active).length;
 
   return (
     <nav style={styles.nav}>
@@ -82,7 +82,8 @@ const styles: Record<string, React.CSSProperties> = {
     padding: '6px 14px', borderRadius: 6, textDecoration: 'none',
     fontSize: 11, fontFamily: 'var(--font-mono)',
     color: 'var(--text-secondary)', letterSpacing: 1,
-    border: '1px solid transparent', transition: 'all 0.2s',
+    borderWidth: 1, borderStyle: 'solid', borderColor: 'transparent', 
+    transition: 'all 0.2s',
   },
   linkActive: {
     color: 'var(--cyan)', background: 'var(--cyan-glow)',

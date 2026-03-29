@@ -3,7 +3,7 @@
 // Wraps the Quality Auditor Agent logic
 // ============================================================
 
-const { callAgent } = require('../gemini');
+import { callAgent } from '../gemini.js';
 
 /**
  * Evaluates and scores a completed task.
@@ -19,4 +19,4 @@ async function evaluateSubmission(task, submission) {
   );
 }
 
-module.exports = { evaluateSubmission };
+export { evaluateSubmission };
