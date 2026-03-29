@@ -1,0 +1,19 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "Backend Dev Server",
+			"type": "shell",
+			"command": "cd c:\\agenticai\\backend && npm run dev",
+			"isBackground": true,
+			"problemMatcher": []
+		},
+		{
+			"label": "Backend Dev Server",
+			"type": "shell",
+			"command": "cd c:\\agenticai\\backend ; npm run dev",
+			"isBackground": true,
+			"problemMatcher": []
+		}
+	]
+}
